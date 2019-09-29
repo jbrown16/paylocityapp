@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Employee Benefits Package Previewer</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular-sanitize.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script type="text/javascript" src="./js/app.js"></script>
+        <script type="text/javascript" src="./js/controller.js"></script>
+        <link rel="stylesheet" href="./css/styles.css">
+    </head>
+    <body ng-app="myApp" ng-controller="myController">
+        <div class="container">
+            <h1 id="page_title"><strong>Employee Benefits Package Previewer</strong></h1>
+            <h5 id="page_summary">
+                <i>
+                    Input your employees and their corresponding dependents to get a preview of the cost of their benefits package...
+                </i>
+            </h5>
+            <!-- Form -->
+            <div class="row" id="form_main_row">
+                <div class="card-deck">
+                    <div class="card shadow bg-white rounded" id="emp_card">
+                        <h5 class="card-header text-white text-center bg-primary mb-3 py-4"><strong>Employee</strong></h5>
+                        <!--Employee card content-->
+                        <div class="card-body px-lg-5 pt-0" id="emp_card_body">
+                            <form class="text-center" id="emp_form">
+                                <div class="form-row" id="form_row">
+                                    <div class="col">
+                                        <!-- First name -->
+                                        <div class="md-form">
+                                            <input type="text" id="emp_first_name" class="form-control" placeholder="First name" ng-model="empFirstName">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <!-- Last name -->
+                                        <div class="md-form">
+                                            <input type="text" id="emp_last_name" class="form-control" placeholder="Last name" ng-model="empLastName">
+                                        </div>
+                                    </div>
+                                    <!-- Employee ADD button -->
+                                    <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" id="emp_add_btn" type="button" ng-click="addEmployee()">Add employee</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card shadow bg-white rounded" id="dep_card">
+                        <h5 class="card-header text-white text-center bg-success mb-3 py-4"><strong>Spouse/Dependent</strong></h5>
+                        <!--Spouse/Dependent card content-->
+                        <div class="card-body px-lg-5 pt-0">
+                            <form class="text-center" id="dep_form">
+                                <div class="form-row">
+                                    <!-- Employee selection DROPDOWN-->
+                                    <div class="dropdown btn-block" id="emp_dropdown">
+                                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" id="emp_dropdown_btn" ng-disabled="disableDependentAddDropDown">{{dropDownText}}</button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="" ng-repeat="emp in employees track by $index" ng-click="selectName($index, emp.employee_name)">{{emp.employee_name}}</a>
+                                        </div>
+                                    </div>
+                                    <!-- First name -->
+                                    <div class="col">
+                                        <div class="md-form">
+                                            <input type="text" id="dep_first_name" class="form-control" placeholder="First name" ng-model="depFirstName" ng-disabled="disableDependentAddFields">
+                                        </div>
+                                    </div>
+                                    <!-- Last name -->
+                                    <div class="col">
+                                        <div class="md-form">
+                                            <input type="text" id="dep_last_name" class="form-control" placeholder="Last name" ng-model="depLastName" ng-disabled="disableDependentAddFields">
+                                        </div>
+                                    </div>
+                                    <!-- Spouse/Dependent ADD button -->
+                                    <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="button" ng-disabled="disableDependentAddBtn" ng-click="addDependent()">Add spouse/dependent</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>     
+            </div>
+            <div>
+                <button type="button" class="btn btn-danger" id="reset_btn" ng-click="resetTable()" ng-disabled="disableResetBtn"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;Reset</button>
+            </div>
+            <!-- Table -->
+            <table class="table table-hover shadow-sm p-3 mb-5 bg-white rounded" id="employee_table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Employee name</th>
+                        <th scope="col">Spouse/Dependents</th>
+                        <th scope="col" data-toggle="tooltip" data-placement="top" title="Cost of benefits per year for record">Cost/Year ($)</th>
+                        <th scope="col" data-toggle="tooltip" data-placement="top" title="Cost of benefits per paycheck for record">Cost/Paycheck ($)</th>
+                        <th scope="col" data-toggle="tooltip" data-placement="top" title="Net salary after benefits deductions">Salary remaining ($)</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="emp in employees track by $index">
+                        <td><span class="sn">{{emp.id}}</span></td>
+                        <td>{{emp.employee_name}}</td>
+                        <td ng-bind-html="printDependents($index)"></td>
+                        <td>{{emp.totalBenefitsCostPerYear}}</td>
+                        <td>{{emp.benefitsCostPerPaycheck}}</td>
+                        <td>{{emp.yearlySalaryRemaining}}</td>
+                        <td><a class="btn btn-xs delete-record" ng-click="deleteRecord($index)" href=""><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
