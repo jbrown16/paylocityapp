@@ -188,13 +188,14 @@ app.controller("myController", function($scope, $window) {
         if ($window.confirm('Are you sure you want to delete ' + name + '\'s ' + (depIsPlural ? depPluralPhrase : '') + 'record?')) {
             // Remove the record from the list/table
             $scope.employees.splice(index, 1);
-        }
 
-        if ($scope.employees.length == 0 || $scope.employees === []) {
-            $scope.disableDependentAddDropDown = true;
-            $scope.dropDownText = 'Select employee...';
-            $scope.disableDependentAddBtn = true;
-            $scope.disableResetBtn = true;
+            // Reset fields for "add dependent" form
+            if ($scope.employees.length == 0 || $scope.employees === []) {
+                $scope.disableDependentAddDropDown = true;
+                $scope.dropDownText = 'Select employee...';
+                $scope.disableDependentAddBtn = true;
+                $scope.disableResetBtn = true;
+            }
         }
     }
 
