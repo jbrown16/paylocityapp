@@ -3,7 +3,7 @@ app.controller("myController", function($scope, $window) {
     const costPerEmployee = 1000;                       // cost of benefits per year for employee
     const costPerDependent = 500;                       // cost of benefits per year for dependent
     const discountPercent = .1;                         // discount percentage
-    const discountNameFirstLetter = "A";           // anyone whose name starts with this letter gets discount
+    const discountNameFirstLetter = "A";                // anyone whose name starts with this letter gets discount
     const amountPerPaycheck = 2000;                     // employee pre-deduction paycheck amount
     const numOfPaychecksPerYear = 26;                   // number of paychecks per year
     const maxNameChars = 15;                            // maximum number of characters per name
@@ -24,10 +24,7 @@ app.controller("myController", function($scope, $window) {
     $scope.empLastName = '';
     $scope.depFirstName = '';
     $scope.depLastName = '';
-    $scope.employee = '';
     $scope.cost = 0;
-    $scope.totalCostPerYear = 0;
-    $scope.yearlyRemaining = numOfPaychecksPerYear * amountPerPaycheck;
 
     // Add Employee to the table
     $scope.addEmployee = function () {
@@ -37,6 +34,7 @@ app.controller("myController", function($scope, $window) {
             $scope.basePrice = costPerEmployee;
             $scope.getCost($scope.empFirstName);
 
+            // Create new 'employee' object
             let employee = {
                 id: $scope.employees.length + 1,
                 employee_name: $scope.empFirstName + " " + $scope.empLastName,
@@ -46,7 +44,9 @@ app.controller("myController", function($scope, $window) {
                 yearlySalaryRemaining: ((numOfPaychecksPerYear * amountPerPaycheck) - $scope.cost).toFixed(2)
             };
 
+            // Add new employee to the list
             $scope.employees.push(employee);
+
             $scope.disableDependentAddDropDown = false;
             $scope.disableResetBtn = false;
             $scope.validName = false;
@@ -64,14 +64,17 @@ app.controller("myController", function($scope, $window) {
             $scope.basePrice = costPerDependent;
             $scope.getCost($scope.depFirstName);
 
+            // Create new 'spouse/dependent' object
             let dependent = {
                 id: $scope.employees.length + 1,
                 dependent_name: $scope.depFirstName + " " + $scope.depLastName,
                 cost: $scope.cost.toFixed(2)
             };
 
+            // Add the new spouse/dependent to the corresponding employee's dependents list
             employeeSelected.dependents.push(dependent);
 
+            // Calculate new costs and totals
             employeeSelected.totalBenefitsCostPerYear = (eval(employeeSelected.totalBenefitsCostPerYear) + eval(dependent.cost)).toFixed(2);
             employeeSelected.benefitsCostPerPaycheck = (eval(employeeSelected.totalBenefitsCostPerYear) / numOfPaychecksPerYear).toFixed(2);
             employeeSelected.yearlySalaryRemaining = ((numOfPaychecksPerYear * amountPerPaycheck) - eval(employeeSelected.totalBenefitsCostPerYear)).toFixed(2);
@@ -142,13 +145,12 @@ app.controller("myController", function($scope, $window) {
         return;
     }
 
-    // Reset the scope in this context
+    // Reset the scope object's globals
     $scope.resetScope = function() {
         $scope.empFirstName = '';
         $scope.empLastName = '';
         $scope.depFirstName = '';
         $scope.depLastName = '';
-        $scope.employee = '';
         $scope.cost = 0;
         $scope.validName = false;
         $scope.dropDownText = dropDownDefaultText;
@@ -160,6 +162,7 @@ app.controller("myController", function($scope, $window) {
     $scope.getCost = function (firstName) {
         let name = firstName.toUpperCase();
 
+        // Check for percent discount if names starts with certain letter
         if (name.startsWith(discountNameFirstLetter)) {
             $scope.cost = $scope.basePrice - ($scope.basePrice * discountPercent);
         } else {
@@ -181,6 +184,7 @@ app.controller("myController", function($scope, $window) {
         let depIsPlural = false;
         let depPluralPhrase = '(and their dependent(s)) ';
 
+        // Set the plurality of the dependents for grammar usage
         if ($scope.employees[index].dependents.length > 0) {
             depIsPlural = true;
         }
@@ -202,6 +206,7 @@ app.controller("myController", function($scope, $window) {
 
     // Reset the benefits cost preview table
     $scope.resetTable = function() {
+        // Prompt for confirmation before deleting all data from the table
         if ($window.confirm('Are you sure you want to reset the table?')) {
             $scope.employees = [];
             $scope.disableDependentAddDropDown = true;

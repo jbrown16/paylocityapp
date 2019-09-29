@@ -16,12 +16,8 @@
     <body ng-app="myApp" ng-controller="myController">
         <div class="container">
             <h1 id="page_title"><strong>Employee Benefits Package Previewer</strong></h1>
-            <h5 id="page_summary">
-                <i>
-                    Input your employees and their corresponding dependents to get a preview of the cost of their benefits package...
-                </i>
-            </h5>
-            <!-- Form -->
+            <h5 id="page_summary"><i>Input your employees and their corresponding dependents to get a preview of the cost of their benefits package...</i></h5>
+            <!-- Employee/Dependent Entry Form -->
             <div class="row" id="form_main_row">
                 <div class="card-deck">
                     <div class="card shadow bg-white rounded" id="emp_card">
@@ -84,7 +80,7 @@
             <div>
                 <button type="button" class="btn btn-danger" id="reset_btn" ng-click="resetTable()" ng-disabled="disableResetBtn"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;Reset</button>
             </div>
-            <!-- Table -->
+            <!-- Benefits Costs Preview Table -->
             <table class="table table-hover shadow-sm p-3 mb-5 bg-white rounded" id="employee_table">
                 <thead class="thead-dark">
                     <tr>
