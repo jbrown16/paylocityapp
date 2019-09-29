@@ -1,12 +1,13 @@
 app.controller("myController", function($scope, $window) {
     // Constants
-    const costPerEmployee = 1000;               // cost of benefits per year for employee
-    const costPerDependent = 500;               // cost of benefits per year for dependent
-    const discountPercent = .1;                 // discount percentage
-    const discountNameStartsWithLetter = "A";   // anyone whose name starts with this letter gets discount
-    const amountPerPaycheck = 2000;             // employee pre-deduction paycheck amount
-    const numOfPaychecksPerYear = 26;           // number of paychecks per year
-    const maxNameChars = 15;                    // maximum number of characters per name
+    const costPerEmployee = 1000;                       // cost of benefits per year for employee
+    const costPerDependent = 500;                       // cost of benefits per year for dependent
+    const discountPercent = .1;                         // discount percentage
+    const discountNameStartsWithLetter = "A";           // anyone whose name starts with this letter gets discount
+    const amountPerPaycheck = 2000;                     // employee pre-deduction paycheck amount
+    const numOfPaychecksPerYear = 26;                   // number of paychecks per year
+    const maxNameChars = 15;                            // maximum number of characters per name
+    const dropDownDefaultText = 'Select employee...';   // default text of the "add spouse/dependent" dropdown button
 
     // Scope globals
     $scope.employees = [];                      // list of employees added to benefits cost preview table
@@ -16,7 +17,7 @@ app.controller("myController", function($scope, $window) {
     $scope.disableDependentAddFields = true;
     $scope.disableDependentAddBtn = true;
     $scope.disableResetBtn = true;
-    $scope.dropDownText = 'Select employee...'; // pre-selected dropdown menu button text
+    $scope.dropDownText = dropDownDefaultText;  // pre-selected dropdown menu button text
     $scope.dropDownNameSelected = '';           // selected employee from dropdown menu
     $scope.validName = false;
     $scope.empFirstName = '';
@@ -150,7 +151,7 @@ app.controller("myController", function($scope, $window) {
         $scope.employee = '';
         $scope.cost = 0;
         $scope.validName = false;
-        $scope.dropDownText = 'Select employee...';
+        $scope.dropDownText = dropDownDefaultText;
         $scope.disableDependentAddFields = true;
         $scope.disableDependentAddBtn = true;
     }
@@ -192,7 +193,7 @@ app.controller("myController", function($scope, $window) {
             // Reset fields for "add dependent" form
             if ($scope.employees.length == 0 || $scope.employees === []) {
                 $scope.disableDependentAddDropDown = true;
-                $scope.dropDownText = 'Select employee...';
+                $scope.dropDownText = dropDownDefaultText;
                 $scope.disableDependentAddBtn = true;
                 $scope.disableResetBtn = true;
             }
@@ -204,7 +205,7 @@ app.controller("myController", function($scope, $window) {
         if ($window.confirm('Are you sure you want to reset the table?')) {
             $scope.employees = [];
             $scope.disableDependentAddDropDown = true;
-            $scope.dropDownText = 'Select employee...';
+            $scope.dropDownText = dropDownDefaultText;
             $scope.disableDependentAddFields = true;
             $scope.disableDependentAddBtn = true;
             $scope.disableResetBtn = true;
