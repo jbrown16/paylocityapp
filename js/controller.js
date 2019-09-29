@@ -3,7 +3,7 @@ app.controller("myController", function($scope, $window) {
     const costPerEmployee = 1000;                       // cost of benefits per year for employee
     const costPerDependent = 500;                       // cost of benefits per year for dependent
     const discountPercent = .1;                         // discount percentage
-    const discountNameStartsWithLetter = "A";           // anyone whose name starts with this letter gets discount
+    const discountNameFirstLetter = "A";           // anyone whose name starts with this letter gets discount
     const amountPerPaycheck = 2000;                     // employee pre-deduction paycheck amount
     const numOfPaychecksPerYear = 26;                   // number of paychecks per year
     const maxNameChars = 15;                            // maximum number of characters per name
@@ -160,7 +160,7 @@ app.controller("myController", function($scope, $window) {
     $scope.getCost = function (firstName) {
         let name = firstName.toUpperCase();
 
-        if (name.startsWith(discountNameStartsWithLetter)) {
+        if (name.startsWith(discountNameFirstLetter)) {
             $scope.cost = $scope.basePrice - ($scope.basePrice * discountPercent);
         } else {
             $scope.cost = $scope.basePrice;
